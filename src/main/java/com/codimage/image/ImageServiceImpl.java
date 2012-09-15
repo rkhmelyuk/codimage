@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-    @Autowired ImageRepository imageRepository;
+    @Autowired ImageDao imageDao;
 
     @Override
     public Image getNextImage() {
-        return imageRepository.findRandomImage();
+        return imageDao.findRandomImage();
     }
 }

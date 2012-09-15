@@ -5,7 +5,7 @@ package com.codimage.image;
  *
  * @author Ruslan Khmelyuk
  */
-public interface ImageRepository {
+public interface ImageDao {
 
     /**
      * Creates a new image resource.

@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * Tests for {@link ImageJdbcRepository}
+ * Tests for {@link ImageJdbcDao}
  *
  * @author Ruslan Khmelyuk
  */
@@ -21,34 +21,34 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration(classes = {AppConfig.class}, loader = AnnotationConfigContextLoader.class)
 public class ImageDaoTest {
 
-    @Autowired private ImageRepository imageRepository;
+    @Autowired private ImageDao imageDao;
 
     @Before
     public void setUp() {
-        imageRepository.deleteAll();
+        imageDao.deleteAll();
     }
 
     @Test
     public void whenFindRandomImage_thenImageReturned() {
         final Image image = createImage();
-        imageRepository.create(image);
+        imageDao.create(image);
 
-        final Image foundImage = imageRepository.findRandomImage();
+        final Image foundImage = imageDao.findRandomImage();
         assertThat(foundImage, not(nullValue()));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void givenMultipleImages_whenFindRandomImage_thenImagesReturnedRandomly() {
-        imageRepository.create(createImage());
-        imageRepository.create(createImage());
-        imageRepository.create(createImage());
-        imageRepository.create(createImage());
-        imageRepository.create(createImage());
+        imageDao.create(createImage());
+        imageDao.create(createImage());
+        imageDao.create(createImage());
+        imageDao.create(createImage());
+        imageDao.create(createImage());
 
-        final Image returnedImage1 = imageRepository.findRandomImage();
-        final Image returnedImage2 = imageRepository.findRandomImage();
-        final Image returnedImage3 = imageRepository.findRandomImage();
+        final Image returnedImage1 = imageDao.findRandomImage();
+        final Image returnedImage2 = imageDao.findRandomImage();
+        final Image returnedImage3 = imageDao.findRandomImage();
 
         assertThat(returnedImage1, not(allOf(equalTo(returnedImage2), equalTo(returnedImage3))));
     }

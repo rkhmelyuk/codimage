@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * @author Ruslan Khmelyuk
  */
 @Repository
-public class ImageJdbcRepository extends JdbcDaoSupport implements ImageRepository {
+public class ImageJdbcDao extends JdbcDaoSupport implements ImageDao {
 
     private static RowMapper<Image> IMAGE_ROW_MAPPER = new RowMapper<Image>() {
 
@@ -43,7 +43,7 @@ public class ImageJdbcRepository extends JdbcDaoSupport implements ImageReposito
     private String deleteAllQuery;
 
     @Autowired
-    public ImageJdbcRepository(DataSource dataSource) {
+    public ImageJdbcDao(DataSource dataSource) {
         setDataSource(dataSource);
     }
 
