@@ -29,7 +29,7 @@ public class ImageDaoTest {
     }
 
     @Test
-    public void whenFindRandomImage_thenImageReturned() {
+    public void findRandomImageReturnsImage() {
         final Image image = createImage();
         imageDao.create(image);
 
@@ -39,7 +39,7 @@ public class ImageDaoTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void givenMultipleImages_whenFindRandomImage_thenImagesReturnedRandomly() {
+    public void findRandomImageReturnsRandomImage() {
         imageDao.create(createImage());
         imageDao.create(createImage());
         imageDao.create(createImage());
@@ -51,6 +51,32 @@ public class ImageDaoTest {
         final Image returnedImage3 = imageDao.findRandomImage();
 
         assertThat(returnedImage1, not(allOf(equalTo(returnedImage2), equalTo(returnedImage3))));
+    }
+
+    @Test
+    public void findNextImageReturnsTheNextImage() {
+        final Image image1 = createImage();
+        final Image image2 = createImage();
+
+        imageDao.create(image1);
+        imageDao.create(image2);
+
+        final Image nextImage = imageDao.findNextImage(image1.getId());
+
+        assertThat(nextImage.getId(), is(image2.getId()));
+    }
+
+    @Test
+    public void findNextImageForLastImageReturnsTheFirstImage() {
+        final Image image1 = createImage();
+        final Image image2 = createImage();
+
+        imageDao.create(image1);
+        imageDao.create(image2);
+
+        final Image nextImage = imageDao.findNextImage(image2.getId());
+
+        assertThat(nextImage.getId(), is(image1.getId()));
     }
 
     private Image createImage() {

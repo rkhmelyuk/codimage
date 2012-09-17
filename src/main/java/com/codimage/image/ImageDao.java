@@ -23,4 +23,11 @@ public interface ImageDao {
      * Removes all images.
      */
     void deleteAll();
+
+    /**
+     * Find the image that goes after image with specified id.
+     * @param imageId the image id.
+     * @return the next image.
+     */
+    Image findNextImage(long imageId);
 }
