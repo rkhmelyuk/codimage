@@ -13,10 +13,15 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>com.codimage.config</param-value>
     </context-param>
-    
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <filter>
+        <filter-name>etagFilter</filter-name>
+        <filter-class>org.springframework.web.filter.ShallowEtagHeaderFilter</filter-class>
+    </filter>
 
     <servlet>
         <servlet-name>pages</servlet-name>
@@ -26,11 +31,28 @@
 
     <servlet-mapping>
         <servlet-name>pages</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <filter-mapping>
+        <filter-name>etagFilter</filter-name>
+        <url-pattern>/</url-pattern>
+        <url-pattern>/js/*</url-pattern>
+        <url-pattern>/css/*</url-pattern>
+        <url-pattern>/image/*</url-pattern>
+    </filter-mapping>
+
     <welcome-file-list>
-        <welcome-file>/index.html</welcome-file>
+        <welcome-file>/</welcome-file>
     </welcome-file-list>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500</location>
+    </error-page>
 
 </web-app>
