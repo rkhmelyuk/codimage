@@ -98,9 +98,9 @@ public class ImageDaoTest {
         imageDao.create(image2);
         imageDao.create(image3);
 
-        final Image nextImage = imageDao.findPrevImage(image2.getId());
+        final Image prevImage = imageDao.findPrevImage(image2.getId());
 
-        assertThat(nextImage.getId(), is(image1.getId()));
+        assertThat(prevImage.getId(), is(image1.getId()));
     }
 
     @Test
@@ -113,8 +113,23 @@ public class ImageDaoTest {
         imageDao.create(image2);
         imageDao.create(image3);
 
-        final Image nextImage = imageDao.findPrevImage(image1.getId());
+        final Image prevImage = imageDao.findPrevImage(image1.getId());
 
-        assertThat(nextImage.getId(), is(image3.getId()));
+        assertThat(prevImage.getId(), is(image3.getId()));
+    }
+
+    @Test
+    public void findPrevImageForLastImageReturnsThePreviousImage() {
+        final Image image1 = FixtureFactory.createImage();
+        final Image image2 = FixtureFactory.createImage();
+        final Image image3 = FixtureFactory.createImage();
+
+        imageDao.create(image1);
+        imageDao.create(image2);
+        imageDao.create(image3);
+
+        final Image prevImage = imageDao.findPrevImage(image3.getId());
+
+        assertThat(prevImage.getId(), is(image2.getId()));
     }
 }
