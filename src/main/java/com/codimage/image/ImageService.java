@@ -13,11 +13,16 @@ public interface ImageService {
      */
     Image getNextImage();
 
-
     /**
      * Gets the next image after image with id specified as parameter.
      * @param imageId the id of the image.
      * @return the next image after specified one.
      */
-    Image getNextImageAfter(long imageId);
+    Image getNextImage(long imageId);
+
+    /**
+     * Resets the next image cache.
+     * TODO - get rid of this after we have added support to edit images list.
+     */
+    void resetNextImageCache();
 }

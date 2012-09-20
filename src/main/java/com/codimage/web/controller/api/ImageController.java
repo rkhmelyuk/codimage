@@ -3,10 +3,9 @@ package com.codimage.web.controller.api;
 import com.codimage.image.Image;
 import com.codimage.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller to support work with images.
@@ -29,6 +28,12 @@ public class ImageController {
     @RequestMapping(value = "/next", params = "id", produces = "application/json")
     @ResponseBody
     public Image nextImageAfter(@RequestParam("id") long id) {
-        return imageService.getNextImageAfter(id);
+        return imageService.getNextImage(id);
+    }
+
+    @RequestMapping(value = "/next/cache/reset", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void resetNextImageCache() {
+        imageService.resetNextImageCache();
     }
 }

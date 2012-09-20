@@ -4,7 +4,7 @@ $(document).ready(function () {
     var imageHolder = $("#image");
     var showImage = function(src) {
         //imageHolder.html(imageTmpl.html().replace("{src}", src))
-        imageHolder.css("background", "url(" + src + ") no-repeat");
+        imageHolder.css("background", "url(" + src + ") no-repeat center center fixed");
     };
     var refreshImage = function () {
         if (nextImage) {
