@@ -31,9 +31,15 @@ public class ImageController {
         return imageService.getNextImage(id);
     }
 
-    @RequestMapping(value = "/next/cache/reset", method = RequestMethod.POST)
+    @RequestMapping(value = "/prev", params = "id", produces = "application/json")
+    @ResponseBody
+    public Image prevImageBefore(@RequestParam("id") long id) {
+        return imageService.getPrevImage(id);
+    }
+
+    @RequestMapping(value = "/cache/reset", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void resetNextImageCache() {
-        imageService.resetNextImageCache();
+        imageService.resetImageCache();
     }
 }

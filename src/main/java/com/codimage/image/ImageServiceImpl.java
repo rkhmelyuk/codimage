@@ -28,14 +28,21 @@ public class ImageServiceImpl implements ImageService {
     @Override
     @Cacheable(AppConstant.CACHE_NEXT_IMAGE)
     public Image getNextImage(long imageId) {
-        log.info("Get image after image:{}", imageId);
+        log.debug("Get image after image:{}", imageId);
         return imageDao.findNextImage(imageId);
     }
 
     @Override
-    @CacheEvict(value = AppConstant.CACHE_NEXT_IMAGE, allEntries = true, beforeInvocation = true)
-    public void resetNextImageCache() {
+    @Cacheable(AppConstant.CACHE_PREV_IMAGE)
+    public Image getPrevImage(long imageId) {
+        log.debug("Get image before image:{}", imageId);
+        return imageDao.findPrevImage(imageId);
+    }
+
+    @Override
+    @CacheEvict(value = {AppConstant.CACHE_NEXT_IMAGE, AppConstant.CACHE_PREV_IMAGE}, allEntries = true, beforeInvocation = true)
+    public void resetImageCache() {
         // @CacheEvict would reset nextImage cache
-        log.info("nextImage cache has been reseted");
+        log.info("images cache has been reseted");
     }
 }

@@ -1,5 +1,6 @@
 package com.codimage.config;
 
+import com.codimage.AppConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -48,7 +49,7 @@ public class AppConfig {
     }
 
     @Bean public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("nextImageCache");
+        return new ConcurrentMapCacheManager(AppConstant.CACHE_NEXT_IMAGE, AppConstant.CACHE_PREV_IMAGE);
     }
 
 }

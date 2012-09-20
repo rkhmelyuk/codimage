@@ -48,6 +48,9 @@ public class ImageJdbcDao extends JdbcDaoSupport implements ImageDao {
     @Value("${image.nextImage}")
     private String nextImageQuery;
 
+    @Value("${image.prevImage}")
+    private String prevImageQuery;
+
     @Value("${image.deleteAll}")
     private String deleteAllQuery;
 
@@ -62,7 +65,8 @@ public class ImageJdbcDao extends JdbcDaoSupport implements ImageDao {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         getJdbcTemplate().update(new PreparedStatementCreator() {
             @Override public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
+                PreparedStatement statement =
+                        con.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS);
                 statement.setString(1, image.getUrl());
                 return statement;
             }
@@ -78,18 +82,46 @@ public class ImageJdbcDao extends JdbcDaoSupport implements ImageDao {
 
     @Override
     public Image findRandomImage() {
-        try {
-            return getJdbcTemplate().queryForObject(nextRandomQuery, IMAGE_ROW_MAPPER);
-        }
-        catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return findImageByQuery(nextRandomQuery);
     }
 
+    /**
+     * We actually loop over all images.
+     * For instance, we have images 1, 2, 3, 4. So, when
+     * * imageId is 2, then image 3 is returned,
+     * * imageId is 4, then image 1 is returned.
+     *
+     * @param imageId the image id.
+     * @return the next image.
+     */
     @Override
     public Image findNextImage(long imageId) {
+        return findImageByQuery(nextImageQuery, imageId);
+    }
+
+    /**
+     * We actually loop over all images on backward order.
+     * For instance, we have images 1, 2, 3, 4. So, when
+     * * imageId is 2, then image 1 is returned,
+     * * imageId is 1, then image 4 is returned.
+     *
+     * @param imageId the image id.
+     * @return the next image.
+     */
+    @Override
+    public Image findPrevImage(long imageId) {
+        return findImageByQuery(prevImageQuery, imageId);
+    }
+
+    /**
+     * Finds single image by query and parameters.
+     * @param query the query.
+     * @param params the array of query parameters.
+     * @return the found image or null.
+     */
+    private Image findImageByQuery(String query, Object... params) {
         try {
-            return getJdbcTemplate().queryForObject(nextImageQuery, ArrayUtils.arrayOf(imageId), IMAGE_ROW_MAPPER);
+            return getJdbcTemplate().queryForObject(query, params, IMAGE_ROW_MAPPER);
         }
         catch (EmptyResultDataAccessException e) {
             return null;

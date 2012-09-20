@@ -21,8 +21,15 @@ public interface ImageService {
     Image getNextImage(long imageId);
 
     /**
+     * Gets the previous image before image with id specified as parameter.
+     * @param imageId the id of the image.
+     * @return the prev image before specified one.
+     */
+    Image getPrevImage(long imageId);
+
+    /**
      * Resets the next image cache.
      * TODO - get rid of this after we have added support to edit images list.
      */
-    void resetNextImageCache();
+    void resetImageCache();
 }

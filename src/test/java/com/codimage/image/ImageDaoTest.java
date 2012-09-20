@@ -1,6 +1,7 @@
 package com.codimage.image;
 
 import com.codimage.config.AppConfig;
+import com.codimage.test.FixtureFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,7 @@ public class ImageDaoTest {
 
     @Test
     public void findRandomImageReturnsImage() {
-        final Image image = createImage();
+        final Image image = FixtureFactory.createImage();
         imageDao.create(image);
 
         final Image foundImage = imageDao.findRandomImage();
@@ -40,11 +41,11 @@ public class ImageDaoTest {
     @Test
     @SuppressWarnings("unchecked")
     public void findRandomImageReturnsRandomImage() {
-        imageDao.create(createImage());
-        imageDao.create(createImage());
-        imageDao.create(createImage());
-        imageDao.create(createImage());
-        imageDao.create(createImage());
+        imageDao.create(FixtureFactory.createImage());
+        imageDao.create(FixtureFactory.createImage());
+        imageDao.create(FixtureFactory.createImage());
+        imageDao.create(FixtureFactory.createImage());
+        imageDao.create(FixtureFactory.createImage());
 
         final Image returnedImage1 = imageDao.findRandomImage();
         final Image returnedImage2 = imageDao.findRandomImage();
@@ -53,13 +54,17 @@ public class ImageDaoTest {
         assertThat(returnedImage1, not(allOf(equalTo(returnedImage2), equalTo(returnedImage3))));
     }
 
+    // -- findNextImage()
+
     @Test
     public void findNextImageReturnsTheNextImage() {
-        final Image image1 = createImage();
-        final Image image2 = createImage();
+        final Image image1 = FixtureFactory.createImage();
+        final Image image2 = FixtureFactory.createImage();
+        final Image image3 = FixtureFactory.createImage();
 
         imageDao.create(image1);
         imageDao.create(image2);
+        imageDao.create(image3);
 
         final Image nextImage = imageDao.findNextImage(image1.getId());
 
@@ -68,21 +73,48 @@ public class ImageDaoTest {
 
     @Test
     public void findNextImageForLastImageReturnsTheFirstImage() {
-        final Image image1 = createImage();
-        final Image image2 = createImage();
+        final Image image1 = FixtureFactory.createImage();
+        final Image image2 = FixtureFactory.createImage();
+        final Image image3 = FixtureFactory.createImage();
 
         imageDao.create(image1);
         imageDao.create(image2);
+        imageDao.create(image3);
 
-        final Image nextImage = imageDao.findNextImage(image2.getId());
+        final Image nextImage = imageDao.findNextImage(image3.getId());
 
         assertThat(nextImage.getId(), is(image1.getId()));
     }
 
-    private Image createImage() {
-        final Image image = new Image();
-        image.setUrl("test url");
+    // -- findPrevImage()
 
-        return image;
+    @Test
+    public void findPrevImageReturnsThePrevImage() {
+        final Image image1 = FixtureFactory.createImage();
+        final Image image2 = FixtureFactory.createImage();
+        final Image image3 = FixtureFactory.createImage();
+
+        imageDao.create(image1);
+        imageDao.create(image2);
+        imageDao.create(image3);
+
+        final Image nextImage = imageDao.findPrevImage(image2.getId());
+
+        assertThat(nextImage.getId(), is(image1.getId()));
+    }
+
+    @Test
+    public void findPrevImageForFirstImageReturnsTheLastImage() {
+        final Image image1 = FixtureFactory.createImage();
+        final Image image2 = FixtureFactory.createImage();
+        final Image image3 = FixtureFactory.createImage();
+
+        imageDao.create(image1);
+        imageDao.create(image2);
+        imageDao.create(image3);
+
+        final Image nextImage = imageDao.findPrevImage(image1.getId());
+
+        assertThat(nextImage.getId(), is(image3.getId()));
     }
 }

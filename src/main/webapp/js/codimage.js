@@ -1,31 +1,72 @@
 $(document).ready(function () {
     var nextImage = null;
-    //var imageTmpl = $("#imageTmpl");
-    var imageHolder = $("#image");
-    var showImage = function(src) {
-        //imageHolder.html(imageTmpl.html().replace("{src}", src))
-        imageHolder.css("background", "url(" + src + ") no-repeat center center fixed");
+
+    var imageDiv = $("#image");
+    var showImage = function (image) {
+        imageDiv.css("background", "url(" + image.url + ") no-repeat center center fixed");
     };
-    var refreshImage = function () {
-        if (nextImage) {
-            showImage(nextImage.url);
-        }
-        $.getJSON("/api/image/next?id=" + nextImage.id, function (json) {
-            nextImage = json;
+    var preloadNextImage = function(id) {
+        Codimage.nextImage(id, function(image) {
+            nextImage = image;
             new Image().src = nextImage.url;
         });
     };
-    var loadFirstImage = function() {
-        $.getJSON("/api/image/next", function (json) {
-            showImage(json.url);
-            $.getJSON("/api/image/next?id=" + json.id, function (json) {
-                nextImage = json;
-                new Image().src = nextImage.url;
-            });
-        });
+    var showNextImage = function () {
+        if (nextImage) {
+            showImage(nextImage);
+        }
+        preloadNextImage(nextImage.id)
     };
 
-    setInterval(refreshImage, 5000);
+    // load the first image, it should be random one
+    Codimage.randomImage(function(image) {
+        showImage(image);
+        preloadNextImage(image.id);
+    });
 
-    loadFirstImage();
+    // show next image every 5 seconds
+    setInterval(showNextImage, 5000);
 });
+
+var Codimage = {
+    /**
+     * Get the random image.
+     */
+    randomImage:function (successCallback, errorCallback) {
+        $.ajax({
+            url:"/api/image/next",
+            dataType:"json",
+            success:successCallback,
+            error:errorCallback
+        });
+    },
+
+    /**
+     * Gets the next image after the current image.
+     * @param currentImageId the current image id.
+     */
+    nextImage:function (currentImageId, successCallback, errorCallback) {
+        $.ajax({
+            url:"/api/image/next",
+            data:{id:currentImageId},
+            dataType:"json",
+            success:successCallback,
+            error:errorCallback
+        });
+    },
+
+    /**
+     * Gets the previous image before the current image.
+     * @param currentImageId the current image id.
+     */
+    prevImage:function (currentImageId, successCallback, errorCallback) {
+        $.ajax({
+            url:"/api/image/prev",
+            data:{id:currentImageId},
+            dataType:"json",
+            success:successCallback,
+            error:errorCallback
+        });
+    }
+
+};

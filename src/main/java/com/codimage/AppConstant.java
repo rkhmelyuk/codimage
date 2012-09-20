@@ -7,9 +7,9 @@ package com.codimage;
  */
 public interface AppConstant {
 
-    /**
-     * The name of the next image cache.
-     * As we loop round the images, we can and actually cache requests for the next image.
-     */
-    String CACHE_NEXT_IMAGE = "nextImageCache";
+    /** The name of the next image cache. */
+    String CACHE_NEXT_IMAGE = "nextImage";
+
+    /** The name of the next image cache. */
+    String CACHE_PREV_IMAGE = "prevImage";
 }
