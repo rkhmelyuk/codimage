@@ -1,9 +1,12 @@
 $(document).ready(function () {
     var nextImage = null;
+    var currentImage = null;
+    var slideshowInterval = null;
 
     var imageDiv = $("#image");
     var showImage = function (image) {
         imageDiv.css("background", "url(" + image.url + ") no-repeat center center fixed");
+        currentImage = image;
     };
     var preloadNextImage = function(id) {
         Codimage.nextImage(id, function(image) {
@@ -15,7 +18,19 @@ $(document).ready(function () {
         if (nextImage) {
             showImage(nextImage);
         }
-        preloadNextImage(nextImage.id)
+        preloadNextImage(currentImage.id)
+    };
+    var pauseSlideshow = function () {
+        var control = $("#play");
+        control.attr("rel", "pauseSlideshow");
+        control.text("Play");
+        clearInterval(slideshowInterval);
+    };
+    var resumeSlideshow = function() {
+        var control = $("#play");
+        control.attr("rel", "resumeSlideshow");
+        control.text("Pause");
+        slideshowInterval = setInterval(showNextImage, 5000);
     };
 
     // load the first image, it should be random one
@@ -25,7 +40,23 @@ $(document).ready(function () {
     });
 
     // show next image every 5 seconds
-    setInterval(showNextImage, 5000);
+    slideshowInterval = setInterval(showNextImage, 5000);
+
+    $('#play').click(function() {
+        if ($(this).attr("rel") == "play") {
+            pauseSlideshow();
+        } else {
+            resumeSlideshow();
+        }
+    });
+    $('#next').click(function() {
+        pauseSlideshow();
+        showNextImage();
+    });
+    $('#prev').click(function() {
+        pauseSlideshow();
+        Codimage.prevImage(currentImage.id, showImage);
+    });
 });
 
 var Codimage = {

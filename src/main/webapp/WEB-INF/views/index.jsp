@@ -17,6 +17,12 @@
     </script>
 </head>
 <body>
-    <div id="image" class="black-and-white"> </div>
+    <div id="image" class="black-and-white">
+        <div class="slide-controls">
+            <a href="javascript:void(0);" id="prev">Previous</a>
+            <a href="javascript:void(0);" id="play" rel="play">Pause</a>
+            <a href="javascript:void(0);" id="next">Next</a>
+        </div>
+    </div>
 </body>
 </html>
